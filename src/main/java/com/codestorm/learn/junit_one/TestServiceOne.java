@@ -10,10 +10,6 @@ public class TestServiceOne {
     }
 
     public String giveMeStringParam(boolean value) {
-        if (value) {
-            return "Hello World!";
-        } else {
-           return null;
-        }
+        return value ? "Hello World!" : null;
     }
 }
