@@ -1,10 +1,11 @@
 package com.codestorm.learn.junit_one;
 
-import io.micrometer.common.util.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/test")
@@ -16,26 +17,28 @@ public class TestControllerOne {
         this.testServiceOne = testServiceOne;
     }
 
-    @GetMapping
-    public String returnString() {
-        return "Hello World!";
-    }
-
-    @GetMapping("/with-entity")
+    @GetMapping("/get")
     public ResponseEntity<String> returnStringWithResponseEntity() {
         return ResponseEntity.ok("Hello World!");
     }
 
-    @GetMapping("/simple-service")
+    @GetMapping("/service")
     public ResponseEntity<String> returnStringFromService() {
         return ResponseEntity.ok(testServiceOne.giveMeString());
     }
 
-    @GetMapping("/simple-service-param")
-    public ResponseEntity<String> returnStringFromServiceWithParam() {
-        String response = testServiceOne.giveMeStringParam(true);
-        return StringUtils.isNotBlank(response)
-                ? ResponseEntity.ok(response)
-                : ResponseEntity.badRequest().body("Value is null");
+    @PostMapping("/save")
+    public ResponseEntity<String> saveData(@RequestParam String data) {
+        return ResponseEntity.ok(testServiceOne.saveData(data));
+    }
+
+    @PostMapping("/save-employee")
+    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
+        return new ResponseEntity<>(testServiceOne.saveEmployee(employee), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/read-data")
+    public ResponseEntity<String> readData(@RequestParam("file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(file.getOriginalFilename());
     }
 }
