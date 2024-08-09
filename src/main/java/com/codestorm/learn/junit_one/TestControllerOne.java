@@ -9,10 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/test")
 public class TestControllerOne {
 
-    private final TestServiceOne testServiceOne;
+    private final TestServiceOne serviceOne;
 
-    public TestControllerOne(TestServiceOne testServiceOne) {
-        this.testServiceOne = testServiceOne;
+    public TestControllerOne(TestServiceOne serviceOne) {
+        this.serviceOne = serviceOne;
     }
 
     @GetMapping("/get")
@@ -22,17 +22,18 @@ public class TestControllerOne {
 
     @GetMapping("/service")
     public ResponseEntity<String> returnStringFromService() {
-        return ResponseEntity.ok(testServiceOne.giveMeString());
+        String valueFromService = serviceOne.giveMeString();
+        return ResponseEntity.ok(valueFromService);
     }
 
     @PostMapping("/save")
     public ResponseEntity<String> saveData(@RequestParam String data) {
-        return ResponseEntity.ok(testServiceOne.saveData(data));
+        return ResponseEntity.ok(serviceOne.saveData(data));
     }
 
     @PostMapping("/save-employee")
     public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
-        return new ResponseEntity<>(testServiceOne.saveEmployee(employee), HttpStatus.CREATED);
+        return new ResponseEntity<>(serviceOne.saveEmployee(employee), HttpStatus.CREATED);
     }
 
     @PostMapping("/read-data")
