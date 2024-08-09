@@ -5,8 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/api/v1/test")
 public class TestControllerOne {
@@ -38,7 +36,7 @@ public class TestControllerOne {
     }
 
     @PostMapping("/read-data")
-    public ResponseEntity<String> readData(@RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<String> readData(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(file.getOriginalFilename());
     }
 }

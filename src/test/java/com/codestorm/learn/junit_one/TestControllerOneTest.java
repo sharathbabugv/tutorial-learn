@@ -14,6 +14,8 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -60,6 +62,8 @@ class TestControllerOneTest {
         mockMvc.perform(post("/api/v1/test/save").param("data", input))
                 .andExpect(status().isOk())
                 .andExpect(content().string(output));
+
+        verify(testServiceOne, times(1)).saveData(anyString());
     }
 
     @Test
@@ -78,14 +82,16 @@ class TestControllerOneTest {
                 .andExpect(jsonPath("$.id").value(savedEmployee.id()))
                 .andExpect(jsonPath("$.name").value(savedEmployee.name()))
                 .andExpect(jsonPath("$.age").isNumber());
+
+        verify(testServiceOne, times(1)).saveEmployee(any(Employee.class));
     }
 
     @Test
     public void readData() throws Exception {
-       MockMultipartFile mockMultipartFile = new MockMultipartFile("file",
-               "hello.txt",
-               MediaType.TEXT_PLAIN_VALUE,
-               "Hey".getBytes());
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file",
+                "hello.txt",
+                MediaType.TEXT_PLAIN_VALUE,
+                "Hey".getBytes());
 
         mockMvc.perform(multipart("/api/v1/test/read-data")
                         .file(mockMultipartFile)
