@@ -17,7 +17,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @WebMvcTest(TestControllerOne.class)
 class TestControllerOneTest {
 
@@ -68,9 +67,11 @@ class TestControllerOneTest {
         Employee input = new Employee(null, "John", 28);
         String requestBody = objectMapper.writeValueAsString(input);
 
-        Employee savedEmployeeOutput = new Employee(UUID.randomUUID().toString(), "John", 28);
+        Employee savedEmployeeOutput = new Employee(UUID.randomUUID().toString(),
+                "John", 28);
 
-        when(testServiceOne.saveEmployee(any(Employee.class))).thenReturn(savedEmployeeOutput);
+        when(testServiceOne.saveEmployee(any(Employee.class)))
+                .thenReturn(savedEmployeeOutput);
 
         mockMvc.perform(post("/api/v1/test/save-employee")
                         .content(requestBody)
@@ -79,6 +80,8 @@ class TestControllerOneTest {
                 .andExpect(jsonPath("$.id").value(savedEmployeeOutput.id()))
                 .andExpect(jsonPath("$.name").value(savedEmployeeOutput.name()))
                 .andExpect(jsonPath("$.age").isNumber());
+
+        System.out.println(objectMapper.writeValueAsString(savedEmployeeOutput));
 }
 
     @Test
